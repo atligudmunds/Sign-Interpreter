@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<p id="output">Text here</p>
+
+		<script src="lib/leap.js"></script>
+
+		<script>
+			var outputid = document.getElementById("output");
+
+			Leap.loop(function(frame) {
+				outputid.innerHTML = "Frame: " + frame.id;
+
+			});
+
+
+		</script>
+	</body>
+</html>
