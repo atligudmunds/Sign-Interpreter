@@ -19,6 +19,7 @@
 	<p id="handCount">0:Hand(s) detected</p>
 	<p id="handHeight"></p>
 	<p id="optimalHeight"></p>
+	
 
 	<script src="lib/leap.js"></script>
 	<script src="leaptrainer.min.js"></script>
@@ -66,20 +67,23 @@
 			function process_Word(new_word) {
 				responsiveVoice.speak(new_word);
 				output.html(new_word);
-				$.get("https://sheltered-eyrie-1287.herokuapp.com/change?" + new_word, function(data, status) {
+				/*$.get("https://sheltered-eyrie-1287.herokuapp.com/change?" + new_word, function(data, status) {
 					console.log("Got-from server:" + data);
-				});
+				});*/
 			};
 			
 			
 			// super redundant functions that are needed because of some weird error
-			function call_left() {
-				process_Word("left");
+			function call_a_ok() {
+				process_Word("a ok");
 			};
-			function call_right() {
-				process_Word("right");
+			function call_rock_sign() {
+				process_Word("rock sign");
 			};
 
+			function call_v_sign() {
+				process_Word("v sign");
+			};
 			
 			// The functions for the test buttons(they will be removed later)
 			$("#left").click(function() {
@@ -91,14 +95,19 @@
 
 
 			// Load in all of the gestures and make LeapTrainer start to detect them
-			$.get("gestures/left_json.txt", function(data) {
+			$.get("gestures/a_ok_json.txt", function(data) {
 				trainer.fromJSON(data);
-				trainer.on('LEFT', call_left);
+				trainer.on('A_OK', call_a_ok);
 			}, "text");
 
-			$.get("gestures/right_json.txt", function(data) {
+			$.get("gestures/rock_sign_json.txt", function(data) {
 				trainer.fromJSON(data);
-				trainer.on('RIGHT', call_right);
+				trainer.on('ROCK_SIGN', call_rock_sign);
+			}, "text");
+
+			$.get("gestures/v_sign_json.txt", function(data) {
+				trainer.fromJSON(data);
+				trainer.on('V_SIGN', call_v_sign);
 			}, "text");
 
 		});
