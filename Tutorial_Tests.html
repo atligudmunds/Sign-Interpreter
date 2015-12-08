@@ -22,7 +22,7 @@
 	
 
 	<script src="lib/leap.js"></script>
-	<script src="leaptrainer.min.js"></script>
+	<script src="leaptrainer.js"></script>
 	<script src="responsivevoice.js"></script>
 	<script src="trainer-ui/js/jquery.min.js"></script>
 	<audio controls hidden id="bleepSound">
@@ -84,6 +84,10 @@
 			function call_v_sign() {
 				process_Word("v sign");
 			};
+
+			function call_fist() {
+				process_Word("fist");
+			};
 			
 			// The functions for the test buttons(they will be removed later)
 			$("#left").click(function() {
@@ -95,20 +99,30 @@
 
 
 			// Load in all of the gestures and make LeapTrainer start to detect them
-			$.get("gestures/a_ok_json.txt", function(data) {
+			$.get("gestures/new_a_ok.txt", function(data) {
 				trainer.fromJSON(data);
-				trainer.on('A_OK', call_a_ok);
+				trainer.on('A-OK', call_a_ok);
 			}, "text");
 
-			$.get("gestures/rock_sign_json.txt", function(data) {
+			$.get("gestures/newV-sign.txt", function(data) {
 				trainer.fromJSON(data);
-				trainer.on('ROCK_SIGN', call_rock_sign);
+				trainer.on('V-SIGN', call_v_sign);
 			}, "text");
 
-			$.get("gestures/v_sign_json.txt", function(data) {
+			$.get("gestures/newRockSign.txt", function(data) {
+				trainer.fromJSON(data);
+				trainer.on('ROCK-SIGN', call_rock_sign);
+			}, "text");
+
+			$.get("gestures/fist.txt", function(data) {
+				trainer.fromJSON(data);
+				trainer.on('FIST', call_fist);
+			}, "text");
+
+			/*$.get("gestures/v_sign_json.txt", function(data) {
 				trainer.fromJSON(data);
 				trainer.on('V_SIGN', call_v_sign);
-			}, "text");
+			}, "text");*/
 
 		});
 	</script>

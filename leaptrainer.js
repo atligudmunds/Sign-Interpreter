@@ -860,7 +860,7 @@ LeapTrainer.Controller = Class.extend({
 	/**
 	 * This is the name of the mechanism used to recognize learned gestures.
 	 */
-	getRecognitionStrategy : function() { return 'Geometric Template Matching'; },
+	getRecognitionStrategy : function() { return 'Artificial Neural Networks'; },
 	
 	/**
 	 * This function converts the requested stored gesture into a JSON string containing the gesture name and training data.  
