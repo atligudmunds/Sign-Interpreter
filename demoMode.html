@@ -2,28 +2,39 @@
 <html>
 <head>
 	 <meta charset="utf-8">
-	<<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
 </head>
 <body>
 	<!--<div class="page-header">-->
 	<h2 id="heading">Hand Sign Translator</h2>
+			<button type="button" id="left">Left_Button</button>
+		<button type="button" id="V-sign">V-sign</button>
 	<!--</div>-->
 	
-	<div id="jumbo-border">
-		<div class="jumbotron">
-			<h1 id="output">Display the result here.</h1> 
+	<!--<div id="jumbo-border">
+		<div class="jumbotron">-->
+	<div>	
+		<div id="hand_display_div">
+			<h1 id="output">Display</h1> 
 			<img hidden  id="v-signImage" src="images/V-sign.png">
+			<img id="v_sign_image_gray" src="images/V-sign_gray.png">
 			<img hidden  id="rock-signImage" src="images/Rock-sign.png">
 			<img hidden  id="ok-signImage" src="images/A-Ok-sign.png">
-
-
 		</div>
+		<div id="info_frame_div" style="opacity: 0">
+			<h2 id="Info_header">The V-Sign</h2>
+			<p>While the V sign means peace whichever way you look at it in much of the world, but in the UK and some other commonwealth countries showing your fingernails is closer to a declaration of war</p>
+		</div>
+
 	</div>
-	<button type="button" id="left">Left_Button</button>
-	<button type="button" id="V-sign">V-sign</button>
-	<p id="handCount">0:Hand(s) detected</p>
-	<p id="handHeight"></p>
-	<p id="optimalHeight"></p>
+
+	<!--	</div>
+	</div>-->
+	<!--<div>
+		<p id="handCount">0:Hand(s) detected</p>
+		<p id="handHeight"></p>
+		<p id="optimalHeight"></p>
+	</div>-->
 
 	<script src="lib/leap.js"></script>
 	<script src="leaptrainer.js"></script>
@@ -43,6 +54,7 @@
 			var handHeight = $("#handHeight");
 			var optimalHeight = $("#optimalHeight");
 			var output = $("#output");
+			var level = 0;
 
 			var trainer = new LeapTrainer.Controller();
 
@@ -97,9 +109,13 @@
 
 			function call_v_sign() {
 				process_Word("v sign");
-				$("#rock-signImage").hide('fast');
-				$("#ok-signImage").hide('fast');
-
+				//$("#rock-signImage").hide('fast');
+				//$("#ok-signImage").hide('fast');
+				$("#v_sign_image_gray").hide('fast');
+				$("#info_frame_div").animate({
+					right: '100px',
+					opacity: '1'
+				});
 				$("#v-signImage").show('fast').delay(3000).fadeIn(100);
 
 			};
@@ -156,7 +172,7 @@
     <style>
 		#heading {
 			padding-left: 25px;
-			fon
+			
 		}
 
 		#jumbo-border {
@@ -165,20 +181,50 @@
 		}
 
 		h1 {
-			text-align: center;
-			color: white;
+			/*text-align: center;
+			color: white;*/
 
 		}
 		 img {
 			
-			padding-left: 45%;
+			/*padding-left: 45%;*/
 			height: 400px;
 		
 		}
 		body {
-			background-color: darkgrey;
+			/*background-color: darkgrey;*/
     		color: black;
-}
+		}
+
+		#info_frame_div {
+			border-style: solid;
+			border-color: red;
+			padding: 30px;
+			/*margin-left: 100px;
+			left:200px;*/
+			background-color: darkgray;
+			
+			width: 300px;
+			height: 500px;
+			display: inline-block;
+
+			/*margin-left: auto;
+  			margin-right: auto;*/
+			float: right;
+		}
+
+		#hand_display_div {
+			border-style: solid;
+			border-color: blue;
+			width: 300px;
+			height: 500px;
+			display: inline-block;
+			margin:0 auto;
+			/*margin-left: auto;*/
+    		/*margin-right: auto;*/
+    		/*float: center;*/
+			/*float: left;*/
+		}
 
 	</style>
 </body>
