@@ -2,25 +2,29 @@
 <html>
 <head>
 	 <meta charset="utf-8">
-	<<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
 </head>
 <body>
 	<!--<div class="page-header">-->
 	<h2 id="heading">Hand Sign Translator</h2>
 	<!--</div>-->
 	
-	<div id="jumbo-border">
+		<div id="jumbo-border">
 		<div class="jumbotron">
 			<h1 id="output">Display the result here.</h1> 
 			<img hidden  id="v-signImage" src="images/V-sign.png">
 			<img hidden  id="rock-signImage" src="images/Rock-sign.png">
 			<img hidden  id="ok-signImage" src="images/A-Ok-sign.png">
-
-
 		</div>
 	</div>
-	<button type="button" id="left">Left_Button</button>
+	<button type="button" id="ok-sign">a-ok</button>
+	<button type="button" id="rock-sign">Rock-sign</button>
 	<button type="button" id="V-sign">V-sign</button>
+	<button type="button" id="levelD">level Down</button>
+	<button type="button" id="levelU">level Up</button>
+
+
+
 	<p id="handCount">0:Hand(s) detected</p>
 	<p id="handHeight"></p>
 	<p id="optimalHeight"></p>
@@ -45,6 +49,8 @@
 			var output = $("#output");
 
 			var trainer = new LeapTrainer.Controller();
+
+			var level = 0;
 
 			// ------The Leap Loop-------
 			// This loop is just for displaying the number of hands and hand position
@@ -78,31 +84,42 @@
 			
 			
 			// super redundant functions that are needed because of some weird error
-			function call_a_ok() {
-				process_Word("a ok");
-				$("#v-signImage").hide('fast');
-				$("#rock-signImage").hide('fast');
+		
+				function call_a_ok() {
+			
+					$("#v-signImage").hide('fast');
+					$("#rock-signImage").hide('fast');
+					if(level == 0){
+						process_Word("a ok");
+				    	$("#ok-signImage").show('fast').delay(1000).fadeIn(100);
+				    	level += 1;
 
-			    $("#ok-signImage").show('fast').delay(3000).fadeIn(100);
+				};
 
-			};
+			}
+			
 			function call_rock_sign() {
-				process_Word("rock sign");
 				$("#v-signImage").hide('fast');
 				$("#ok-signImage").hide('fast');
-
-				$("#rock-signImage").show('fast').delay(3000).fadeIn(100);
-
+				if(level == 1){
+					process_Word("rock sign");
+					$("#rock-signImage").show('fast').delay(1000).fadeIn(100);
+					level += 1;
+				}
 			};
+			
+				function call_v_sign() {
+					$("#rock-signImage").hide('fast');
+					$("#ok-signImage").hide('fast');
+					if(level == 2){
+						process_Word("v sign");
+						$("#v-signImage").show('fast').delay(1000).fadeIn(100);
+						level += 1;
 
-			function call_v_sign() {
-				process_Word("v sign");
-				$("#rock-signImage").hide('fast');
-				$("#ok-signImage").hide('fast');
+				};
 
-				$("#v-signImage").show('fast').delay(3000).fadeIn(100);
-
-			};
+			}
+			
 
 			function call_fist() {
 				process_Word("fist");
@@ -110,18 +127,51 @@
 			};
 			
 			// The functions for the test buttons(they will be removed later)
-			$("#left").click(function() {
-				process_Word("left");
+			$("#ok-sign").click(function() {
+				if(level === 0){
+					process_Word("a ok");
+					call_a_ok();
+				}
+
 			});
-			$("#right").click(function() {
-				process_Word("right");
+			$("#rock-sign").click(function() {
+				if(level === 1){
+					process_Word("ROCK-SIGN");
+					call_rock_sign();
+				}
 			});
+
 			$("#V-sign").click(function() {
 				//process_Word("V-sign");
-				call_v_sign();
+				if(level === 2){
+					process_Word("V-sign");
+					call_v_sign();
+				}
 
 
 			});
+			$("#levelU").click(function() {
+				//process_Word("V-sign");
+				if(level <= 3){
+					//process_Word("V-sign");
+					level += 1;
+					  //$("level").show();
+				}
+
+
+			});
+			$("#levelD").click(function() {
+				//process_Word("V-sign");
+				//if(level > -1){
+					//process_Word("V-sign");
+					level -= 1;
+					 //$("level").show();
+				//}
+
+
+			});
+
+
 
 
 
