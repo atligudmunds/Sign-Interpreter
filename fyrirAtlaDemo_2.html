@@ -50,32 +50,17 @@
 	<script src="trainer-ui/js/jquery.min.js"></script>
 	<script src="responsivevoice.js"></script>
 
-	<audio controls hidden id="bleepSound">
-           <source src="button-3.mp3" type="audio/mpeg">
-      	Your browser does not support the audio element.
-    </audio>
+	
     <audio controls hidden id="myVid">
            <source src="https://www.sounddogs.com/sound-effects/104/mp3/526217_SOUNDDOGS__cr.mp3" type="audio/mpeg">
       	Your browser does not support the audio element.
     </audio>
-     <audio controls hidden id="myVid2">
-           <source src="https://www.sounddogs.com/sound-effects/104/mp3/526214_SOUNDDOGS__cr.mp3" type="audio/mpeg">
-      	Your browser does not support the audio element.
-    </audio>
-        <audio controls hidden id="myVid3">
-           <source src="http://www.freesfx.co.uk/rx2/mp3s/10/12549_1435111880.mp3" type="audio/mpeg">
-      	Your browser does not support the audio element.
-    </audio>
-   
-   
-   
-
-
+    
+  
 	<script>
 		$(document).ready(function()
 		{
 			// Loading all of the HTML id's into objects(for faster lookup)
-			var audio = $("#bleepSound")[0];
 			var handCounter = $("#handCount");
 			var handHeight = $("#handHeight");
 			var optimalHeight = $("#optimalHeight");
@@ -86,9 +71,7 @@
 			var swipeTimeout;
 
 			var vid = document.getElementById("myVid");
-			var vid2 = document.getElementById("myVid2");
-			var vid3 = document.getElementById("myVid3");
-
+			
 			/*var trainer = new LeapTrainer.Controller({maxRecordingVelocity: 60 ,minPoseFrames: 8});*/
 			/*var swipe_trainer = new LeapTrainer.Controller();
 			swipe_trainer.pause();*/
@@ -97,8 +80,10 @@
 
 			var trainer2 = new LeapTrainer.Controller({minPoseFrames: 5});
 			trainer2.pause();
+			
 			var trainer3 = new LeapTrainer.Controller({minPoseFrames: 5});
 			trainer3.pause();
+			
 			var trainer = new LeapTrainer.Controller({minPoseFrames: 5});
 
 			// ------The Leap Loop-------
@@ -161,11 +146,9 @@
 					//swiper.connect();
 					//levelOver = 1;
 					$("#rock-gray").hide('fast');
-
 					$("#rock-signImage").show('fast');
 					$("#description").html("A favourite gesture of many a rocker; in some parts of the world, the Corna is a not so subtle way of saying i am having intercourse with your wife behind your back. Use at your peril ");
 					$("#Info_header").html("ROCK-SIGN");
-
 					$("#right").animate({
 				    	opacity: '1'
 				    },"slow");
@@ -177,7 +160,6 @@
 				    swipeTimeout = window.setTimeout(function() {
 				    	$("#swipeImage").fadeIn('slow');
 				    }, 3600);
-					
 					//$("#swipeImage").delay(3600).fadeIn('fast');
 				}
 			};
@@ -191,7 +173,6 @@
 					$("#v-signImage").show('fast');
 					$("#description").html("While the V sign means peace whichever way you look at it in much of the world, but in the UK and some other commonwealth countries showing your fingernails is closer to a declaration of war");
 					$("#Info_header").html("V-SIGN");
-
 					$("#right").animate({
 						opacity: '1'
 					},"slow");
@@ -229,7 +210,6 @@
 					call_v_sign();
 				}
 			});
-
 
 			$("#nextLevel").click(function() {
 				changeLevel();
@@ -295,15 +275,13 @@
 				}
 			};
 
-
 			swiper.on('gesture', function(gesture) {
 				console.log(gesture.type + ":" + gesture.duration);
 				if(gesture.type === 'swipe') {
 					changeLevel();
 				}
 			});
-
-			
+		
 			// Load in all of the gestures and make LeapTrainer start to detect them
 			/*$.get("gestures/swipe_json.txt", function(data) {
 				swipe_trainer.fromJSON(data);
@@ -315,7 +293,7 @@
 				trainer.on('A-OK', call_a_ok);
 			}, "text");
 
-			trainer.on('gesture-unknown', function(allHits) {
+			/*trainer.on('gesture-unknown', function(allHits) {
 				for (var gestureName in allHits) {
 					console.log(gestureName + ":" + parseInt(100 * allHits[gestureName]));
 				}
@@ -325,22 +303,32 @@
 				for (var gestureName in allHits) {
 					console.log(gestureName + ":" + parseInt(100 * allHits[gestureName]));
 				}
-			});
+			}); */
 
-			$.get("gestures/newRockSign.txt", function(data) {
+			$.get("gestures/RockBackwards.txt", function(data) {
 				trainer2.fromJSON(data);
-				trainer2.on('ROCK-SIGN', call_rock_sign);
+				trainer2.on('ROCK', call_rock_sign);
 			}, "text");
+			$.get("gestures/RockForward.txt", function(data) {
+				trainer2.fromJSON(data);
+				trainer2.on('ROCK-DOWN', call_rock_sign);
+			}, "text");
+
 
 			$.get("gestures/newV-sign.txt", function(data) {
 				trainer3.fromJSON(data);
 				trainer3.on('V-SIGN', call_v_sign);
 			}, "text");
-
-
+				$.get("gestures/PeaceUpSide.txt", function(data) {
+				trainer3.fromJSON(data);
+				trainer3.on('PEACE-FIXED', call_v_sign);
+			}, "text");
 
 		});
 	</script>
+
+
+							<!-- ----------------------------------- CSS STYLE---------------------------------------- -->
     <style>
 		#heading {
 			padding-left: 25px;
@@ -360,9 +348,6 @@
 			float: left;	
 			margin-left: 10px;
 			background-color: #F1A94E;
-
-
-	
 		}
 
 		#left {
@@ -370,10 +355,6 @@
 			margin-top: 30px;
 			width: 140px;
 			height: 500px;
-
-
-
-	
 			margin-left: 200px;
 
 		}
@@ -384,38 +365,35 @@
 			width: 300px;
 			height: 470px;
 			background-color: #E45641;
-
 			margin-top: 30px;
-
-
 		}
-		#buttons{
-			
+
+		#buttons {
+
 			bottom: 0;
 			position: absolute;
-			padding-bottom: 
+			/*padding-bottom:*/ 
 
 		}
 		h1 {
 			text-align: center;
 			color: white;
-
 		}
 		h2 {
 			color: white;
 
 		}
 		 img {
-			
 			height: 400px;
-		
 		}
+
 		body {
 			background-color:  #7B8D8E;
     		color: white;
     		font-style: bold;
     		font-family: "Arial";
 		}
+
 		#nextLevel {
 			font-size: 11px;
 		}
