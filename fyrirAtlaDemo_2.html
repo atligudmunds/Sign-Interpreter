@@ -28,7 +28,7 @@
 			<h2 id="Info_header">A-OK sign</h2>
 			<p id="description" style="font-weight: bold; font-size: 20px"> From insinuating someone is homosexual to calling them an A-hole or simply as a shorthand for Fuck you, the A-OK sign does not necessarily travel well</p>
 			<button type="button" id="nextLevel">Next Level</button>
-
+			<img hidden id="swipeImage" src="images/swipe_image.png" style="height:200px">
 
 		</div>
 	</div>
@@ -39,7 +39,7 @@
 		<button type="button" id="rock-sign">ROCK </button>
 		<button type="button" id="V-sign">PEACE </button>
 
-
+		
 		<p id="handCount">0:Hand(s) detected</p>
 		<p id="handHeight"></p>
 		<p id="optimalHeight"></p>
@@ -48,7 +48,7 @@
 	<script src="lib/leap.js"></script>
 	<script src="leaptrainer.js"></script>
 	<script src="trainer-ui/js/jquery.min.js"></script>
-		<script src="responsivevoice.js"></script>
+	<script src="responsivevoice.js"></script>
 
 	<audio controls hidden id="bleepSound">
            <source src="button-3.mp3" type="audio/mpeg">
@@ -80,13 +80,26 @@
 			var handHeight = $("#handHeight");
 			var optimalHeight = $("#optimalHeight");
 			var output = $("#output");
-			var vid = document.getElementById("myVid"); 
-			var vid2 = document.getElementById("myVid2"); 
-			var vid3 = document.getElementById("myVid3"); 
-
-			var trainer = new LeapTrainer.Controller();
-
+			//var swipeImage = $("#swipeImage");
 			var level = 0;
+			var levelOver = 0;
+			var swipeTimeout;
+
+			var vid = document.getElementById("myVid");
+			var vid2 = document.getElementById("myVid2");
+			var vid3 = document.getElementById("myVid3");
+
+			/*var trainer = new LeapTrainer.Controller({maxRecordingVelocity: 60 ,minPoseFrames: 8});*/
+			/*var swipe_trainer = new LeapTrainer.Controller();
+			swipe_trainer.pause();*/
+
+			var swiper = new Leap.Controller({enableGestures: true});
+
+			var trainer2 = new LeapTrainer.Controller({minPoseFrames: 5});
+			trainer2.pause();
+			var trainer3 = new LeapTrainer.Controller({minPoseFrames: 5});
+			trainer3.pause();
+			var trainer = new LeapTrainer.Controller({minPoseFrames: 5});
 
 			// ------The Leap Loop-------
 			// This loop is just for displaying the number of hands and hand position
@@ -108,154 +121,223 @@
 			});
 		
 			function process_Word(new_word) {
-			//	responsiveVoice.speak(new_word);
 				output.html(new_word);
-				
 			};
 			
-			// super rndant functions that are needed because of some weird error
+			// super redundant functions that are needed because of some weird error
 		
 			function call_a_ok() {
 				if(level == 0){
-
 					process_Word("A-OK");
-					vid.play(); 
+					vid.play();
+					trainer.pause();
+				    //swipe_trainer.resume();
+				    swiper.connect();
+				    //levelOver = 1;
 					$("#ok-gray").hide('fast');
-				    $("#ok-signImage").show('fast');//.delay(3000).fadeIn(100);
+				    $("#ok-signImage").show('fast');
 				    $("#right").animate({
 				    	opacity: '1'
 				    },"slow");
+				    // setting a timeout so people don't accidentally swipe
+				    // to the next level right after doing the gesture
+				    setTimeout(function(){
+				    	//alert("time has COME!!!");
+				    	levelOver = 1;
+				    }, 1000);
+				    
+				    swipeTimeout = window.setTimeout(function() {
+				    	$("#swipeImage").fadeIn('slow');
+				    }, 3600);
 				}
-
 			};
+
 			function call_rock_sign() {
 				if(level == 1){
 					process_Word("ROCK-SIGN");
-					vid.play(); 
+					vid.play(); 					
+					trainer2.pause();
+					//swipe_trainer.resume();
+					//swiper.connect();
+					//levelOver = 1;
 					$("#rock-gray").hide('fast');
 
-					$("#rock-signImage").show('fast');//.delay(3000).fadeIn(100);
+					$("#rock-signImage").show('fast');
 					$("#description").html("A favourite gesture of many a rocker; in some parts of the world, the Corna is a not so subtle way of saying i am having intercourse with your wife behind your back. Use at your peril ");
 					$("#Info_header").html("ROCK-SIGN");
 
 					$("#right").animate({
 				    	opacity: '1'
 				    },"slow");
+
+					setTimeout(function(){
+				    	levelOver = 1;
+				    }, 1000);
+				    
+				    swipeTimeout = window.setTimeout(function() {
+				    	$("#swipeImage").fadeIn('slow');
+				    }, 3600);
+					
+					//$("#swipeImage").delay(3600).fadeIn('fast');
 				}
 			};
 
 			function call_v_sign() {
 				if (level == 2) {
-				process_Word("V-SIGN");
-				vid.play(); 
-				$("#v-sign-gray").hide('fast');
-				$("#v-signImage").show('fast');
-				$("#description").html("While the V sign means peace whichever way you look at it in much of the world, but in the UK and some other commonwealth countries showing your fingernails is closer to a declaration of war");
-				$("#Info_header").html("V-SIGN");
+					process_Word("V-SIGN");
+					vid.play();
+					trainer2.pause();
+					$("#v-sign-gray").hide('fast');
+					$("#v-signImage").show('fast');
+					$("#description").html("While the V sign means peace whichever way you look at it in much of the world, but in the UK and some other commonwealth countries showing your fingernails is closer to a declaration of war");
+					$("#Info_header").html("V-SIGN");
 
-				$("#right").animate({
-					opacity: '1'
-				},"slow");
-				//.delay(3000).fadeIn(100);
+					$("#right").animate({
+						opacity: '1'
+					},"slow");
+
+					setTimeout(function(){
+				    	levelOver = 1;
+				    }, 2000);
+
+				    swipeTimeout = window.setTimeout(function() {
+				    	$("#swipeImage").fadeIn('slow');
+				    }, 3600);
+					//$("#swipeImage").delay(3600).fadeIn('fast');
 				};
-
 			};
 
-			/*function call_fist() {
-				process_Word("fist");
-				
-			};*/
 			
 			// The functions for the test buttons(they will be removed later)
 			$("#ok-sign").click(function() {
 				if(level === 0){
-					process_Word("A-OK");
-
+					//process_Word("A-OK");
 					call_a_ok();
 				}
-
 			});
+
 			$("#rock-sign").click(function() {
 				if(level === 1){
-					process_Word("ROCK-SIGN");
+					//process_Word("ROCK-SIGN");
 					call_rock_sign();
+				}
+			});
+
+			$("#V-sign").click(function() {
+				if(level === 2){
+					//process_Word("V-sign");
+					call_v_sign();
 				}
 			});
 
 
 			$("#nextLevel").click(function() {
-				//process_Word("V-sign");
-				
-				if(level === 0){
-					$("#output").html("Do a ROCK-SIGN")
-					$('#ok-signImage').hide('fast');
-					$('#rock-gray').show('fast');
-					$("#right").animate({
-				    	opacity: '0'
-				    },"slow");
-
-				}
-				else if(level === 1){
-					$("#output").html("Now the PEACE-SIGN")
-					$('#rock-signImage').hide('fast');
-					$('#v-sign-gray').show('fast');
-					$("#right").animate({
-				    	opacity: '0'
-				    },"slow");
-				    $("#nextLevel").hide('fast');
-					
-				}
-				/*else if(level === 2){
-					$("#output").html("Now the PEACE-SIGN")
-					$('#rock-signImage').hide('fast');
-					$('#v-sign-gray').show('fast');
-					$("#right").animate({
-				    	opacity: '0'
-				    },"slow");
-					
-				}*/
-
-				level += 1;
-
-
+				changeLevel();
 			});
 
+			function changeLevel() {
+				if(levelOver == 1) {
+					if(level === 0) {
+						//swipe_trainer.pause();
+						console.log("PHASE 1");
+						//swiper.disconnect();
+						trainer2.resume();
+						$("#output").html("Do a ROCK-SIGN")
+						$('#ok-signImage').hide('fast');
+						$('#rock-gray').show('fast');
+						$("#right").animate({
+					    	opacity: '0'
+					    },"slow");
+					    window.clearTimeout(swipeTimeout);
+					    swipeTimeout = undefined;
+					    $("#swipeImage").hide('fast');
+					}
+					else if(level === 1){
+						//swipe_trainer.pause();
+						//swiper.disconnect();
+						trainer3.resume();
+						$("#output").html("Now the PEACE-SIGN");
+						$('#rock-signImage').hide('fast');
+						$('#v-sign-gray').show('fast');
+						$("#right").animate({
+					    	opacity: '0'
+					    },"slow");
+					    window.clearTimeout(swipeTimeout);
+					    swipeTimeout = undefined;
+					    //$("#nextLevel").hide('fast');
+					    $("#swipeImage").hide('fast');
+					}
+					else if(level === 2){
+						$("#v-signImage").hide('fast');
+						$("#ok-gray").show('fast');
+						trainer.resume();
+						$("#right").animate({
+					    	opacity: '0'
+					    },"slow");
 
-			$("#V-sign").click(function() {
-				//process_Word("V-sign");
-				if(level === 2){
-					process_Word("V-sign");
-					call_v_sign();
+					    window.clearTimeout(swipeTimeout);
+					    swipeTimeout = undefined;
+
+					    $("#swipeImage").hide('fast');
+						process_Word("Do a A-OK sign");
+
+						setTimeout(function(){
+				    		$("#Info_header").html("A-OK sign");
+				    		$("#description").html("From insinuating someone is homosexual to calling them an A-hole or simply as a shorthand for Fuck you, the A-OK sign does not necessarily travel well");
+				   		}, 300);
+
+						level = 0;
+						levelOver = 0;
+						return;
+					}
+					level += 1;
+					levelOver = 0;
 				}
+			};
 
 
+			swiper.on('gesture', function(gesture) {
+				console.log(gesture.type + ":" + gesture.duration);
+				if(gesture.type === 'swipe') {
+					changeLevel();
+				}
 			});
+
 			
 			// Load in all of the gestures and make LeapTrainer start to detect them
+			/*$.get("gestures/swipe_json.txt", function(data) {
+				swipe_trainer.fromJSON(data);
+				swipe_trainer.on('SWIPE', changeLevel);
+			}, "text");*/
+
 			$.get("gestures/new_a_ok.txt", function(data) {
 				trainer.fromJSON(data);
 				trainer.on('A-OK', call_a_ok);
 			}, "text");
 
-			$.get("gestures/newV-sign.txt", function(data) {
-				trainer.fromJSON(data);
-				trainer.on('V-SIGN', call_v_sign);
-			}, "text");
+			trainer.on('gesture-unknown', function(allHits) {
+				for (var gestureName in allHits) {
+					console.log(gestureName + ":" + parseInt(100 * allHits[gestureName]));
+				}
+			});
+
+			trainer.on('gesture-recognized', function(allHits) {
+				for (var gestureName in allHits) {
+					console.log(gestureName + ":" + parseInt(100 * allHits[gestureName]));
+				}
+			});
 
 			$.get("gestures/newRockSign.txt", function(data) {
-				trainer.fromJSON(data);
-				trainer.on('ROCK-SIGN', call_rock_sign);
+				trainer2.fromJSON(data);
+				trainer2.on('ROCK-SIGN', call_rock_sign);
 			}, "text");
 
-			/*$.get("gestures/fist.txt", function(data) {
-				trainer.fromJSON(data);
-				trainer.on('FIST', call_fist);
-			}, "text");*/
+			$.get("gestures/newV-sign.txt", function(data) {
+				trainer3.fromJSON(data);
+				trainer3.on('V-SIGN', call_v_sign);
+			}, "text");
 
-			/*$.get("gestures/v_sign_json.txt", function(data) {
-				trainer.fromJSON(data);
-				trainer.on('V_SIGN', call_v_sign);
-			}, "text");*/
+
 
 		});
 	</script>
@@ -277,7 +359,7 @@
 			height: 500px;
 			float: left;	
 			margin-left: 10px;
-						background-color: #F1A94E;
+			background-color: #F1A94E;
 
 
 	
@@ -301,7 +383,7 @@
 			margin-left: 10px;
 			width: 300px;
 			height: 470px;
-			background-color:  #E45641;
+			background-color: #E45641;
 
 			margin-top: 30px;
 
@@ -331,11 +413,11 @@
 		body {
 			background-color:  #7B8D8E;
     		color: white;
-    		font-style: bold ;
+    		font-style: bold;
     		font-family: "Arial";
 		}
 		#nextLevel {
-			font-size: 15px;
+			font-size: 11px;
 		}
 
 	</style>
